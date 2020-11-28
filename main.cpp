@@ -51,6 +51,7 @@ static void joystickDescribe(int index, SDL_Joystick *joystick)
     SDL_Haptic * haptic = SDL_HapticOpenFromJoystick(joystick);
     if (!haptic) {
         qDebug(" haptic: no");
+        qDebug("%s", "");
         return;
     }
     unsigned int flags = SDL_HapticQuery(haptic);
@@ -64,6 +65,7 @@ static void joystickDescribe(int index, SDL_Joystick *joystick)
             qDebug("  %s", haptic_flags[i].name);
     }
     qDebug(" rumble: %d", SDL_HapticRumbleSupported(haptic));
+    qDebug("%s", "");
     SDL_HapticStopAll(haptic);
     SDL_HapticClose(haptic);
 }
@@ -86,6 +88,14 @@ int main(int argc, char *argv[])
     }
 
     qDebug("Number of attached joysticks: %d", SDL_NumJoysticks());
+    for (int i = 0; i < SDL_NumJoysticks(); i++) {
+        SDL_Joystick *joystick = SDL_JoystickOpen(i);
+        if (!joystick)
+            continue;
+
+        joystickDescribe(i, joystick);
+        SDL_JoystickClose(joystick);
+    }
 
     int index = 0;
     if (argc > 1)
@@ -96,13 +106,10 @@ int main(int argc, char *argv[])
     }
 
     MainWindow w;
-    if (SDL_NumJoysticks() > 0)
-    {
-        SDL_Joystick *joystick = SDL_JoystickOpen(index);
-        if (joystick) {
-            joystickDescribe(index, joystick);
-            w.setJoystick(index);
-        }
+    SDL_Joystick *joystick = SDL_JoystickOpen(index);
+    if (joystick) {
+        w.setJoystick(index);
+        SDL_JoystickClose(joystick);
     }
 
     w.show();
