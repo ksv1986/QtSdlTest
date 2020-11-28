@@ -47,10 +47,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeHaptic()
 {
+    stopHaptic();
     if (!haptic)
         return;
-
-    stopHaptic();
     SDL_HapticClose(haptic);
     haptic = 0;
 }
@@ -189,11 +188,14 @@ void MainWindow::axisMoved(SDL_JoyAxisEvent event)
 void MainWindow::setHaptic(struct _SDL_Haptic *haptic)
 {
     this->haptic = haptic;
-    ui->testHaptic->setEnabled(haptic);
 }
 
 void MainWindow::stopHaptic()
 {
+    if (!haptic) {
+        SDL_JoystickRumble(joystick, 0, 0, 0);
+        return;
+    }
     SDL_HapticStopEffect(haptic, hapticId);
     SDL_HapticDestroyEffect(haptic, hapticId);
     hapticId = -1;
@@ -218,7 +220,7 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
     b->setChecked(event.type == SDL_JOYBUTTONDOWN);
     if (!ui->testHaptic->isChecked())
         return;
-    if (!haptic || !b->isChecked() || hapticId >= 0)
+    if (b->isChecked() || hapticId >= 0)
         return;
 
     SDL_HapticEffect lr = {0};
@@ -226,6 +228,12 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
     lr.leftright.length = kHapticLength;
     lr.leftright.large_magnitude = (event.button & 1) ? 0x7FFF : 0;
     lr.leftright.small_magnitude = (event.button & 1) ? 0 : 0x7FFF;
+
+    if (!haptic) {
+        if (SDL_JoystickRumble(joystick, lr.leftright.large_magnitude, lr.leftright.small_magnitude, lr.leftright.length) < 0)
+            qWarning("Failed to start rumble: %s\n", SDL_GetError());
+            return;
+    }
 
     hapticId = SDL_HapticNewEffect(haptic, &lr);
     if (hapticId < 0) {
