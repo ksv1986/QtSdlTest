@@ -39,7 +39,6 @@ private:
     void setButtons(int num);
     void setHaptic(SDL_Haptic *haptic);
     void setAxis(SdlAxisWidget *widget, int xaxis, int yaxis);
-    void setSlider(SdlSliderWidget *widget, int axis);
     void fillJoystickList();
 
     Ui::MainWindow *ui;

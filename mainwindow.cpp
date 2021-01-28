@@ -82,6 +82,8 @@ void MainWindow::closeJoystick()
     numHats    = 0;
     which = -1;
 
+    ui->axis4->reset();
+    ui->axis5->reset();
     ui->pov->reset();
 }
 
@@ -110,19 +112,6 @@ void MainWindow::setAxis(SdlAxisWidget *widget, int xaxis, int yaxis)
     } else {
         disconnect(eventThread, &SdlEventThread::axisEvent,
             widget, &SdlAxisWidget::axisMoved);
-        widget->reset();
-    }
-}
-
-void MainWindow::setSlider(SdlSliderWidget *widget, int axis)
-{
-    if (axis < numAxis) {
-        widget->init(joystick, axis);
-        connect(eventThread, &SdlEventThread::axisEvent,
-            widget, &SdlSliderWidget::axisMoved);
-    } else {
-        disconnect(eventThread, &SdlEventThread::axisEvent,
-            widget, &SdlSliderWidget::axisMoved);
         widget->reset();
     }
 }
@@ -157,8 +146,6 @@ void MainWindow::setJoystick(int index)
     ui->pov->setEnabled(numHats > 0);
     setAxis  (ui->xyaxis, 0, 1);
     setAxis  (ui->zaxis,  2, 3);
-    setSlider(ui->axis4,  4);
-    setSlider(ui->axis5,  5);
     setButtons(numButtons);
 
     int axisOffset = numButtons;
@@ -182,6 +169,14 @@ void MainWindow::axisMoved(SDL_JoyAxisEvent event)
         return;
     if (event.axis >= numAxis)
         return;
+    switch (event.axis) {
+    case 4:
+        ui->axis4->axisMoved(event);
+        break;
+    case 5:
+        ui->axis5->axisMoved(event);
+        break;
+    }
     QLabel *l = qobject_cast<QLabel*>(
                 ui->buttonsLayout->itemAt(numButtons + event.axis)->widget());
     if (!l)
