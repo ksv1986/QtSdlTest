@@ -30,8 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     fillJoystickList();
 
-    connect(eventThread, &SdlEventThread::axisEvent,
-            this, &MainWindow::axisMoved);
     connect(eventThread, &SdlEventThread::joyButtonEvent,
         this, &MainWindow::joystickButtonPressed);
     connect(eventThread, &SdlEventThread::joyDeviceRemoved,
@@ -71,6 +69,8 @@ void MainWindow::closeJoystick()
 
     disconnect(eventThread, &SdlEventThread::hatEvent,
         this, &MainWindow::povPressed);
+    disconnect(eventThread, &SdlEventThread::axisEvent,
+        this, &MainWindow::axisMoved);
 
     while (auto child = ui->buttonsLayout->takeAt(0)) {
         delete child;
@@ -82,6 +82,8 @@ void MainWindow::closeJoystick()
     numHats    = 0;
     which = -1;
 
+    ui->xyaxis->reset();
+    ui->zaxis->reset();
     ui->axis4->reset();
     ui->axis5->reset();
     ui->pov->reset();
@@ -100,19 +102,6 @@ void MainWindow::setButtons(int num)
         b->setText(QString::number(i+1));
         b->setCheckable(true);
         ui->buttonsLayout->addWidget(b, i / 6, i % 6);
-    }
-}
-
-void MainWindow::setAxis(SdlAxisWidget *widget, int xaxis, int yaxis)
-{
-    if (std::max(xaxis, yaxis) < numAxis) {
-        widget->init(joystick, xaxis, yaxis);
-        connect(eventThread, &SdlEventThread::axisEvent,
-            widget, &SdlAxisWidget::axisMoved);
-    } else {
-        disconnect(eventThread, &SdlEventThread::axisEvent,
-            widget, &SdlAxisWidget::axisMoved);
-        widget->reset();
     }
 }
 
@@ -144,8 +133,6 @@ void MainWindow::setJoystick(int index)
 
     hat = 0;
     ui->pov->setEnabled(numHats > 0);
-    setAxis  (ui->xyaxis, 0, 1);
-    setAxis  (ui->zaxis,  2, 3);
     setButtons(numButtons);
 
     int axisOffset = numButtons;
@@ -157,6 +144,8 @@ void MainWindow::setJoystick(int index)
                                         (axisOffset + i) % 6);
     }
 
+    connect(eventThread, &SdlEventThread::axisEvent,
+            this, &MainWindow::axisMoved);
     connect(eventThread, &SdlEventThread::hatEvent,
             this, &MainWindow::povPressed);
 
@@ -170,6 +159,18 @@ void MainWindow::axisMoved(SDL_JoyAxisEvent event)
     if (event.axis >= numAxis)
         return;
     switch (event.axis) {
+    case 0:
+        ui->xyaxis->xaxisMoved(event);
+        break;
+    case 1:
+        ui->xyaxis->yaxisMoved(event);
+        break;
+    case 2:
+        ui->zaxis->xaxisMoved(event);
+        break;
+    case 3:
+        ui->zaxis->yaxisMoved(event);
+        break;
     case 4:
         ui->axis4->axisMoved(event);
         break;

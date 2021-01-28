@@ -38,7 +38,6 @@ private:
     void closeJoystick();
     void setButtons(int num);
     void setHaptic(SDL_Haptic *haptic);
-    void setAxis(SdlAxisWidget *widget, int xaxis, int yaxis);
     void fillJoystickList();
 
     Ui::MainWindow *ui;

@@ -3,36 +3,24 @@
 
 SdlAxisWidget::SdlAxisWidget(QWidget *parent)
     : QWidget{parent}
-    , which{-1}
 {
-}
-
-void SdlAxisWidget::init(SDL_Joystick *joystick, int xaxis, int yaxis)
-{
-    which = SDL_JoystickInstanceID(joystick);
-    this->xaxis = xaxis;
-    this->yaxis = yaxis;
-    jx = SDL_JoystickGetAxis(joystick, xaxis);
-    jy = SDL_JoystickGetAxis(joystick, yaxis);
-    update();
 }
 
 void SdlAxisWidget::reset()
 {
-    which = -1;
+    jx = jy = 0;
     update();
 }
 
-void SdlAxisWidget::axisMoved(SDL_JoyAxisEvent event)
+void SdlAxisWidget::xaxisMoved(SDL_JoyAxisEvent event)
 {
-    if (event.which != which)
-        return;
-    if (event.axis == xaxis)
-        jx = event.value;
-    else if (event.axis == yaxis)
-        jy = event.value;
-    else
-        return;
+    jx = event.value;
+    update();
+}
+
+void SdlAxisWidget::yaxisMoved(SDL_JoyAxisEvent event)
+{
+    jy = event.value;
     update();
 }
 
