@@ -17,11 +17,11 @@ public slots:
     void povPressed(SDL_JoyHatEvent event);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void resizeEvent(QResizeEvent *event);
-    void drawPovButton(QPainter &painter, int kx, int ky);
+    void paintEvent(QPaintEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
+    void drawPovButton(QPainter &painter, int kx, int ky);
     void resizeCross();
     int X(int kx) const { return xoffset + kx*crossSize; }
     int Y(int ky) const { return yoffset + ky*crossSize; }

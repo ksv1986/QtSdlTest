@@ -25,8 +25,6 @@ signals:
     void joyDeviceRemoved(SDL_JoyDeviceEvent event);
     void sdlEvent(SDL_Event event);
 
-public slots:
-
 protected:
     void run() override;
 };

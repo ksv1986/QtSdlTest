@@ -15,7 +15,7 @@ public slots:
     void axisMoved(SDL_JoyAxisEvent event);
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *event) override;
 
 private:
     Sint16 value = 0;

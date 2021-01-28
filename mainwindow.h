@@ -29,9 +29,10 @@ private slots:
     void joyDeviceRemoved(SDL_JoyDeviceEvent event);
     void joystickButtonPressed(SDL_JoyButtonEvent event);
     void povPressed(SDL_JoyHatEvent event);
+    void stopHaptic();
 
 protected:
-    virtual void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
 private:
     void closeHaptic();
@@ -51,9 +52,6 @@ private:
     int numAxis;
     int numButtons;
     int numHats;
-
-private slots:
-    void stopHaptic();
 };
 
 #endif // MAINWINDOW_H

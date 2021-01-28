@@ -18,9 +18,11 @@ public slots:
     void yaxisMoved(SDL_JoyAxisEvent event);
 
 protected:
-    void paintEvent(QPaintEvent *event);
-    void drawCross(QPainter &painter, int dx, int dy);
+    void paintEvent(QPaintEvent *event) override;
+
 private:
+    void drawCross(QPainter &painter, int dx, int dy);
+
     Sint16 jx = 0;
     Sint16 jy = 0;
 };
