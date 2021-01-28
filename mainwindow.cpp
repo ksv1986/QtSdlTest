@@ -30,6 +30,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     fillJoystickList();
 
+    connect(eventThread, &SdlEventThread::joyDeviceAdded,
+            this, &MainWindow::joyDeviceAdded);
     connect(eventThread, &SdlEventThread::joyDeviceRemoved,
             this, &MainWindow::joyDeviceRemoved);
     connect(ui->choosePadBox, QOverload<int>::of(&QComboBox::activated), this, [this](int index){
@@ -261,6 +263,7 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
 
 void MainWindow::joyDeviceAdded(SDL_JoyDeviceEvent event)
 {
+    fillJoystickList();
     if (!joystick)
         setJoystick(event.which);
 }
@@ -269,6 +272,7 @@ void MainWindow::joyDeviceRemoved(SDL_JoyDeviceEvent event)
 {
     if (event.which == SDL_JoystickInstanceID(joystick))
         closeJoystick();
+    fillJoystickList();
     if (SDL_NumJoysticks() > 0)
         setJoystick(0);
 }

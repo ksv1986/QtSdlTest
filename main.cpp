@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<SDL_JoyAxisEvent>("SDL_JoyAxisEvent");
     qRegisterMetaType<SDL_JoyHatEvent>("SDL_JoyHatEvent");
     qRegisterMetaType<SDL_JoyButtonEvent>("SDL_JoyButtonEvent");
+    qRegisterMetaType<SDL_JoyDeviceEvent>("SDL_JoyDeviceEvent");
 
     int rv = SDL_Init(SDL_INIT_JOYSTICK|SDL_INIT_HAPTIC);
     if (rv) {
