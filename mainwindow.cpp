@@ -30,8 +30,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     fillJoystickList();
 
-    connect(eventThread, &SdlEventThread::joyButtonEvent,
-        this, &MainWindow::joystickButtonPressed);
     connect(eventThread, &SdlEventThread::joyDeviceRemoved,
             this, &MainWindow::joyDeviceRemoved);
     connect(ui->choosePadBox, QOverload<int>::of(&QComboBox::activated), this, [this](int index){
@@ -67,6 +65,8 @@ void MainWindow::closeJoystick()
     qDebug("%s: close joystick %d %s", __CLASS__,
            SDL_JoystickInstanceID(joystick), SDL_JoystickName(joystick));
 
+    disconnect(eventThread, &SdlEventThread::joyButtonEvent,
+        this, &MainWindow::joystickButtonPressed);
     disconnect(eventThread, &SdlEventThread::hatEvent,
         this, &MainWindow::povPressed);
     disconnect(eventThread, &SdlEventThread::axisEvent,
@@ -148,6 +148,9 @@ void MainWindow::setJoystick(int index)
             this, &MainWindow::axisMoved);
     connect(eventThread, &SdlEventThread::hatEvent,
             this, &MainWindow::povPressed);
+    connect(eventThread, &SdlEventThread::joyButtonEvent,
+        this, &MainWindow::joystickButtonPressed);
+
 
     setHaptic(SDL_HapticOpenFromJoystick(joystick));
 }
@@ -213,6 +216,8 @@ void MainWindow::stopHaptic()
 void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
 {
     //qDebug("%s: button %d type %x", __FUNCTION__, event.button, event.type);
+    if (event.which != which)
+        return;
     if (event.button >= numButtons)
         return;
     QLayoutItem *item = ui->buttonsLayout->itemAt(event.button);
