@@ -46,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     closeJoystick();
+    eventThread->stop();
     delete ui;
 }
 
@@ -81,7 +82,6 @@ void MainWindow::closeJoystick()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     eventThread->stop();
-    eventThread->terminate();
     event->accept();
 }
 
