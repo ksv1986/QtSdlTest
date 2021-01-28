@@ -13,7 +13,6 @@ Q_DECLARE_METATYPE(SDL_JoyButtonEvent)
 class SdlEventThread : public QThread
 {
     Q_OBJECT
-
 public:
     explicit SdlEventThread(QObject *parent = 0);
     void stop();

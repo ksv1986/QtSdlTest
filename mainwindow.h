@@ -18,13 +18,10 @@ class SdlSliderWidget;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void setJoystick(int index);
-
-public slots:
 
 private slots:
     void axisMoved(SDL_JoyAxisEvent event);

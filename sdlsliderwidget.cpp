@@ -2,8 +2,11 @@
 #include <QPainter>
 #include <QPen>
 
-SdlSliderWidget::SdlSliderWidget(QWidget *parent) :
-    QWidget(parent), which(-1), axis(-1), value(0)
+SdlSliderWidget::SdlSliderWidget(QWidget *parent)
+    : QWidget{parent}
+    , which{-1}
+    , axis{-1}
+    , value{0}
 {
 }
 

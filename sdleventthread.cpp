@@ -1,10 +1,9 @@
 #include "sdleventthread.h"
-#include <stdio.h>
 
 static const char __CLASS__[] = "EventThread";
 
-SdlEventThread::SdlEventThread(QObject *parent) :
-    QThread(parent)
+SdlEventThread::SdlEventThread(QObject *parent)
+    : QThread{parent}
 {
 }
 

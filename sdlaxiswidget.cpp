@@ -1,10 +1,9 @@
 #include "sdlaxiswidget.h"
 #include <QPainter>
-#include <stdio.h>
-#include <stdint.h>
 
-SdlAxisWidget::SdlAxisWidget(QWidget *parent) :
-    QWidget(parent), which(-1)
+SdlAxisWidget::SdlAxisWidget(QWidget *parent)
+    : QWidget{parent}
+    , which{-1}
 {
 }
 

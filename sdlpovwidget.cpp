@@ -2,8 +2,10 @@
 #include <QPainter>
 #include <QPolygon>
 
-SdlPovWidget::SdlPovWidget(QWidget *parent) :
-    QWidget(parent), which(-1), povCross(new QPolygon(13))
+SdlPovWidget::SdlPovWidget(QWidget *parent)
+    : QWidget{parent}
+    , which{-1}
+    , povCross{new QPolygon{13}}
 {
 }
 

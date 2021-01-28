@@ -7,7 +7,6 @@
 #include <QTimer>
 #include <QSignalMapper>
 #include <QGridLayout>
-#include <stdio.h>
 
 #include <SDL_haptic.h>
 
@@ -16,11 +15,16 @@ const int kSafeTimeout  = 50;
 
 static const char __CLASS__[] = "MainWindow";
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow), eventThread(new SdlEventThread(this)),
-    joystick(0), haptic(0), hapticId(-1),
-    numAxis(0), numButtons(0), numHats(0)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow{parent}
+    , ui{new Ui::MainWindow}
+    , eventThread{new SdlEventThread{this}}
+    , joystick{0}
+    , haptic{0}
+    , hapticId{-1}
+    , numAxis{0}
+    , numButtons{0}
+    , numHats{0}
 {
     ui->setupUi(this);
 
