@@ -30,12 +30,12 @@ MainWindow::MainWindow(QWidget *parent)
 
     fillJoystickList();
 
-    connect(eventThread, SIGNAL(axisEvent(SDL_JoyAxisEvent)),
-            this,          SLOT(axisMoved(SDL_JoyAxisEvent)));
-    connect(eventThread, SIGNAL(joyButtonEvent(SDL_JoyButtonEvent)),
-            this,   SLOT(joystickButtonPressed(SDL_JoyButtonEvent)));
-    connect(eventThread, SIGNAL(joyDeviceRemoved(SDL_JoyDeviceEvent)),
-            this,          SLOT(joyDeviceRemoved(SDL_JoyDeviceEvent)));
+    connect(eventThread, &SdlEventThread::axisEvent,
+            this, &MainWindow::axisMoved);
+    connect(eventThread, &SdlEventThread::joyButtonEvent,
+        this, &MainWindow::joystickButtonPressed);
+    connect(eventThread, &SdlEventThread::joyDeviceRemoved,
+            this, &MainWindow::joyDeviceRemoved);
     connect(ui->choosePadBox, QOverload<int>::of(&QComboBox::activated), this, [this](int index){
         setJoystick(index - 1);
     });
@@ -99,12 +99,12 @@ void MainWindow::setAxis(SdlAxisWidget *widget, int xaxis, int yaxis)
 {
     if (std::max(xaxis, yaxis) < numAxis) {
         widget->init(joystick, xaxis, yaxis);
-        connect(eventThread, SIGNAL(axisEvent(SDL_JoyAxisEvent)),
-                widget,        SLOT(axisMoved(SDL_JoyAxisEvent)));
+        connect(eventThread, &SdlEventThread::axisEvent,
+            widget, &SdlAxisWidget::axisMoved);
     } else {
+        disconnect(eventThread, &SdlEventThread::axisEvent,
+            widget, &SdlAxisWidget::axisMoved);
         widget->reset();
-        disconnect(eventThread, SIGNAL(axisEvent(SDL_JoyAxisEvent)),
-                   widget,        SLOT(axisMoved(SDL_JoyAxisEvent)));
     }
 }
 
@@ -112,12 +112,12 @@ void MainWindow::setPov(SdlPovWidget *widget, int hat)
 {
     if (hat < numHats) {
         widget->init(joystick, hat);
-        connect(eventThread, SIGNAL(hatEvent(SDL_JoyHatEvent)),
-                widget,      SLOT(povPressed(SDL_JoyHatEvent)));
+        connect(eventThread, &SdlEventThread::hatEvent,
+            widget, &SdlPovWidget::povPressed);
     } else {
+        disconnect(eventThread, &SdlEventThread::hatEvent,
+            widget, &SdlPovWidget::povPressed);
         widget->reset();
-        disconnect(eventThread, SIGNAL(hatEvent(SDL_JoyHatEvent)),
-                   widget,      SLOT(povPressed(SDL_JoyHatEvent)));
     }
 }
 
@@ -125,12 +125,12 @@ void MainWindow::setSlider(SdlSliderWidget *widget, int axis)
 {
     if (axis < numAxis) {
         widget->init(joystick, axis);
-        connect(eventThread, SIGNAL(axisEvent(SDL_JoyAxisEvent)),
-                widget,        SLOT(axisMoved(SDL_JoyAxisEvent)));
+        connect(eventThread, &SdlEventThread::axisEvent,
+            widget, &SdlSliderWidget::axisMoved);
     } else {
+        disconnect(eventThread, &SdlEventThread::axisEvent,
+            widget, &SdlSliderWidget::axisMoved);
         widget->reset();
-        disconnect(eventThread, SIGNAL(axisEvent(SDL_JoyAxisEvent)),
-                   widget,        SLOT(axisMoved(SDL_JoyAxisEvent)));
     }
 }
 
@@ -246,7 +246,7 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
     }
     //qDebug("[%04x; %04x] : id", lr.leftright.large_magnitude, lr.leftright.small_magnitude, hapticId);
     SDL_HapticRunEffect(haptic, hapticId, 1);
-    QTimer::singleShot(kHapticLength + kSafeTimeout, this, SLOT(stopHaptic()));
+    QTimer::singleShot(kHapticLength + kSafeTimeout, this, &MainWindow::stopHaptic);
 }
 
 void MainWindow::joyDeviceAdded(SDL_JoyDeviceEvent event)
