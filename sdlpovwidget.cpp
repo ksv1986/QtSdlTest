@@ -4,31 +4,17 @@
 
 SdlPovWidget::SdlPovWidget(QWidget *parent)
     : QWidget{parent}
-    , which{-1}
     , povCross{new QPolygon{13}}
 {
 }
 
-void SdlPovWidget::init(SDL_Joystick *joystick, int hat)
-{
-    which = SDL_JoystickInstanceID(joystick);
-    this->hat = hat;
-    value = SDL_JoystickGetHat(joystick, hat);
-    update();
-}
-
 void SdlPovWidget::reset()
 {
-    which = -1;
     update();
 }
 
 void SdlPovWidget::povPressed(SDL_JoyHatEvent event)
 {
-    if (event.which != which)
-        return;
-    if (event.hat != hat)
-        return;
     value = event.value;
     update();
 }
@@ -72,13 +58,12 @@ void SdlPovWidget::resizeEvent(QResizeEvent *event)
 void SdlPovWidget::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
-    if (which < 0) {
-        p.setPen(Qt::lightGray);
-        p.drawPolyline(*povCross);
-        return;
-    }
-    p.setPen(Qt::gray);
+    p.setPen(isEnabled()
+        ? Qt::gray
+        : Qt::lightGray);
     p.drawPolyline(*povCross);
+    if (!isEnabled())
+        return;
     if (value & SDL_HAT_UP) {
         drawPovButton(p, 1, 0);
         p.drawLine(X(1)+1, Y(1),   X(2)-1, Y(1));

@@ -28,6 +28,7 @@ private slots:
     void joyDeviceAdded(SDL_JoyDeviceEvent event);
     void joyDeviceRemoved(SDL_JoyDeviceEvent event);
     void joystickButtonPressed(SDL_JoyButtonEvent event);
+    void povPressed(SDL_JoyHatEvent event);
 
 protected:
     virtual void closeEvent(QCloseEvent *event);
@@ -37,7 +38,6 @@ private:
     void closeJoystick();
     void setButtons(int num);
     void setHaptic(SDL_Haptic *haptic);
-    void setPov(SdlPovWidget *widget, int hat);
     void setAxis(SdlAxisWidget *widget, int xaxis, int yaxis);
     void setSlider(SdlSliderWidget *widget, int axis);
     void fillJoystickList();
@@ -45,8 +45,10 @@ private:
     Ui::MainWindow *ui;
     SdlEventThread *eventThread;
     struct _SDL_Joystick *joystick;
+    SDL_JoystickID which;
     SDL_Haptic *haptic;
     SDL_HapticEffect lr;
+    int hat;
     int hapticId;
     int numAxis;
     int numButtons;

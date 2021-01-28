@@ -69,6 +69,9 @@ void MainWindow::closeJoystick()
     qDebug("%s: close joystick %d %s", __CLASS__,
            SDL_JoystickInstanceID(joystick), SDL_JoystickName(joystick));
 
+    disconnect(eventThread, &SdlEventThread::hatEvent,
+        this, &MainWindow::povPressed);
+
     while (auto child = ui->buttonsLayout->takeAt(0)) {
         delete child;
     }
@@ -77,6 +80,9 @@ void MainWindow::closeJoystick()
     numAxis    = 0;
     numButtons = 0;
     numHats    = 0;
+    which = -1;
+
+    ui->pov->reset();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -104,19 +110,6 @@ void MainWindow::setAxis(SdlAxisWidget *widget, int xaxis, int yaxis)
     } else {
         disconnect(eventThread, &SdlEventThread::axisEvent,
             widget, &SdlAxisWidget::axisMoved);
-        widget->reset();
-    }
-}
-
-void MainWindow::setPov(SdlPovWidget *widget, int hat)
-{
-    if (hat < numHats) {
-        widget->init(joystick, hat);
-        connect(eventThread, &SdlEventThread::hatEvent,
-            widget, &SdlPovWidget::povPressed);
-    } else {
-        disconnect(eventThread, &SdlEventThread::hatEvent,
-            widget, &SdlPovWidget::povPressed);
         widget->reset();
     }
 }
@@ -150,6 +143,7 @@ void MainWindow::setJoystick(int index)
     if (!joystick)
         return;
 
+    which = SDL_JoystickInstanceID(joystick);
     ui->choosePadBox->setCurrentIndex(index + 1);
 
     qDebug("%s: setup joystick %d %s", __CLASS__,
@@ -159,7 +153,8 @@ void MainWindow::setJoystick(int index)
     numButtons = SDL_JoystickNumButtons(joystick);
     numHats    = SDL_JoystickNumHats(joystick);
 
-    setPov   (ui->pov,    0);
+    hat = 0;
+    ui->pov->setEnabled(numHats > 0);
     setAxis  (ui->xyaxis, 0, 1);
     setAxis  (ui->zaxis,  2, 3);
     setSlider(ui->axis4,  4);
@@ -175,11 +170,16 @@ void MainWindow::setJoystick(int index)
                                         (axisOffset + i) % 6);
     }
 
+    connect(eventThread, &SdlEventThread::hatEvent,
+            this, &MainWindow::povPressed);
+
     setHaptic(SDL_HapticOpenFromJoystick(joystick));
 }
 
 void MainWindow::axisMoved(SDL_JoyAxisEvent event)
 {
+    if (event.which != which)
+        return;
     if (event.axis >= numAxis)
         return;
     QLabel *l = qobject_cast<QLabel*>(
@@ -187,6 +187,15 @@ void MainWindow::axisMoved(SDL_JoyAxisEvent event)
     if (!l)
         return;
     l->setText(QString("[%1]: %2").arg(event.axis).arg(event.value));
+}
+
+void MainWindow::povPressed(SDL_JoyHatEvent event)
+{
+    if (event.which != which)
+        return;
+    if (event.hat != hat)
+        return;
+    ui->pov->povPressed(event);
 }
 
 void MainWindow::setHaptic(struct _SDL_Haptic *haptic)

@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <SDL_events.h>
-#include <SDL_joystick.h>
 
 class QPolygon;
 
@@ -12,12 +11,11 @@ class SdlPovWidget : public QWidget
     Q_OBJECT
 public:
     explicit SdlPovWidget(QWidget *parent = 0);
-    void init(SDL_Joystick *joystick, int hat);
     void reset();
 
 public slots:
     void povPressed(SDL_JoyHatEvent event);
-    
+
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
@@ -25,13 +23,10 @@ protected:
 
 private:
     void resizeCross();
-    int X(int kx) { return xoffset + kx*crossSize; }
+    int X(int kx) const { return xoffset + kx*crossSize; }
+    int Y(int ky) const { return yoffset + ky*crossSize; }
 
-    int Y(int ky) { return yoffset + ky*crossSize; }
-
-    SDL_JoystickID which;
-    int hat;
-    int value;
+    Uint8 value = 0;
     int crossSize;
     int xoffset;
     int yoffset;
