@@ -2,15 +2,14 @@
 #define SDLPOVWIDGET_H
 
 #include <QWidget>
+#include <QPolygon>
 #include <SDL_events.h>
-
-class QPolygon;
 
 class SdlPovWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SdlPovWidget(QWidget *parent = 0);
+    using QWidget::QWidget;
     void reset();
 
 public slots:
@@ -30,7 +29,7 @@ private:
     int crossSize;
     int xoffset;
     int yoffset;
-    QPolygon *povCross;
+    QPolygon povCross = QPolygon{13};
 };
 
 #endif // SDLPOVWIDGET_H

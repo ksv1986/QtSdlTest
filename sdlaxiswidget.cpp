@@ -1,11 +1,6 @@
 #include "sdlaxiswidget.h"
 #include <QPainter>
 
-SdlAxisWidget::SdlAxisWidget(QWidget *parent)
-    : QWidget{parent}
-{
-}
-
 void SdlAxisWidget::reset()
 {
     jx = jy = 0;

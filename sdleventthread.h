@@ -14,7 +14,7 @@ class SdlEventThread : public QThread
 {
     Q_OBJECT
 public:
-    explicit SdlEventThread(QObject *parent = 0);
+    using QThread::QThread;
     void stop();
 
 signals:

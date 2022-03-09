@@ -2,11 +2,6 @@
 #include <QPainter>
 #include <QPen>
 
-SdlSliderWidget::SdlSliderWidget(QWidget *parent)
-    : QWidget{parent}
-{
-}
-
 void SdlSliderWidget::reset()
 {
     value = 0;

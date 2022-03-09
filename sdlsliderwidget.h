@@ -8,7 +8,7 @@ class SdlSliderWidget : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SdlSliderWidget(QWidget *parent = 0);
+    using QWidget::QWidget;
     void reset();
 
 public slots:

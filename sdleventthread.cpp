@@ -2,11 +2,6 @@
 
 static const char __CLASS__[] = "EventThread";
 
-SdlEventThread::SdlEventThread(QObject *parent)
-    : QThread{parent}
-{
-}
-
 void SdlEventThread::run()
 {
     SDL_Event e;

@@ -10,7 +10,7 @@ class SdlAxisWidget : public QWidget
 public:
     static const int kCrossSize = 5;
 
-    explicit SdlAxisWidget(QWidget *parent = 0);
+    using QWidget::QWidget;
     void reset();
 
 public slots:

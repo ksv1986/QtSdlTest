@@ -2,12 +2,6 @@
 #include <QPainter>
 #include <QPolygon>
 
-SdlPovWidget::SdlPovWidget(QWidget *parent)
-    : QWidget{parent}
-    , povCross{new QPolygon{13}}
-{
-}
-
 void SdlPovWidget::reset()
 {
     update();
@@ -34,19 +28,19 @@ void SdlPovWidget::resizeCross()
     xoffset   = ( width() - 3*crossSize) / 2;
     yoffset   = (height() - 3*crossSize) / 2;
 
-    povCross->setPoint( 0, X(0), Y(1));
-    povCross->setPoint( 1, X(1), Y(1));
-    povCross->setPoint( 2, X(1), Y(0));
-    povCross->setPoint( 3, X(2), Y(0));
-    povCross->setPoint( 4, X(2), Y(1));
-    povCross->setPoint( 5, X(3), Y(1));
-    povCross->setPoint( 6, X(3), Y(2));
-    povCross->setPoint( 7, X(2), Y(2));
-    povCross->setPoint( 8, X(2), Y(3));
-    povCross->setPoint( 9, X(1), Y(3));
-    povCross->setPoint(10, X(1), Y(2));
-    povCross->setPoint(11, X(0), Y(2));
-    povCross->setPoint(12, X(0), Y(1));
+    povCross.setPoint( 0, X(0), Y(1));
+    povCross.setPoint( 1, X(1), Y(1));
+    povCross.setPoint( 2, X(1), Y(0));
+    povCross.setPoint( 3, X(2), Y(0));
+    povCross.setPoint( 4, X(2), Y(1));
+    povCross.setPoint( 5, X(3), Y(1));
+    povCross.setPoint( 6, X(3), Y(2));
+    povCross.setPoint( 7, X(2), Y(2));
+    povCross.setPoint( 8, X(2), Y(3));
+    povCross.setPoint( 9, X(1), Y(3));
+    povCross.setPoint(10, X(1), Y(2));
+    povCross.setPoint(11, X(0), Y(2));
+    povCross.setPoint(12, X(0), Y(1));
 }
 
 void SdlPovWidget::resizeEvent(QResizeEvent *event)
@@ -61,7 +55,7 @@ void SdlPovWidget::paintEvent(QPaintEvent *)
     p.setPen(isEnabled()
         ? Qt::gray
         : Qt::lightGray);
-    p.drawPolyline(*povCross);
+    p.drawPolyline(povCross);
     if (!isEnabled())
         return;
     if (value & SDL_HAT_UP) {
