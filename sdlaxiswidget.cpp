@@ -24,8 +24,8 @@ void SdlAxisWidget::paintEvent(QPaintEvent *)
     // jx and jy are from int16_t diapasone. Map them to [0-size]:
     int dx = width()  / 2;
     int dy = height() / 2;
-    dx += dx*jx / 0x8000;
-    dy += dy*jy / 0x8000;
+    dx += dx*jx / SDL_MAX_SINT16;
+    dy += dy*jy / SDL_MAX_SINT16;
     QPainter painter(this);
     painter.setPen(Qt::black);
     drawCross(painter, dx, dy);

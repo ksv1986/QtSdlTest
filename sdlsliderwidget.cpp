@@ -20,8 +20,8 @@ void SdlSliderWidget::paintEvent(QPaintEvent *)
         return;
 
     QPainter painter(this);
-    int halfh = this->geometry().height()/2;
-    int h = halfh * value/0x7FFF;
+    int halfh = geometry().height() / 2;
+    int h = halfh * value / SDL_MAX_SINT16;
     if (h > 0) {
         painter.fillRect(0, halfh-h, geometry().width(), h, Qt::red);
     } else {
