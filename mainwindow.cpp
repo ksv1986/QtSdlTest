@@ -104,7 +104,6 @@ void MainWindow::setButtons(int num)
     for (int i = 0; i<num; i++) {
         QPushButton *b = new QPushButton(this);
         b->setText(QString::number(i+1));
-        b->setCheckable(true);
         ui->buttonsLayout->addWidget(b, i / kItemsInRow, i % kItemsInRow);
     }
 }
@@ -239,10 +238,10 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
         return;
     }
 
-    b->setChecked(event.type == SDL_JOYBUTTONDOWN);
+    b->setDown(event.type == SDL_JOYBUTTONDOWN);
     if (!ui->testHaptic->isChecked())
         return;
-    if (b->isChecked() || hapticId >= 0)
+    if (b->isDown() || hapticId >= 0)
         return;
 
     SDL_HapticEffect lr = {0};
