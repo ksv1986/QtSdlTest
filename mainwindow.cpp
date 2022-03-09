@@ -10,6 +10,7 @@
 
 #include <SDL_haptic.h>
 
+const Uint16 kHapticMagnitude = SDL_MAX_SINT16;
 const int kHapticLength = 500;
 const int kSafeTimeout  = 50;
 const int kItemsInRow = 4;
@@ -247,8 +248,8 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
     SDL_HapticEffect lr = {0};
     lr.type = SDL_HAPTIC_LEFTRIGHT;
     lr.leftright.length = kHapticLength;
-    lr.leftright.large_magnitude = (event.button & 1) ? 0x7FFF : 0;
-    lr.leftright.small_magnitude = (event.button & 1) ? 0 : 0x7FFF;
+    lr.leftright.large_magnitude = (event.button & 1) ? kHapticMagnitude : 0;
+    lr.leftright.small_magnitude = (event.button & 1) ? 0 : kHapticMagnitude;
 
     if (!haptic) {
         if (SDL_JoystickRumble(joystick, lr.leftright.large_magnitude, lr.leftright.small_magnitude, lr.leftright.length) < 0) {
