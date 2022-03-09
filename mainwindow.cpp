@@ -188,7 +188,11 @@ void MainWindow::axisMoved(SDL_JoyAxisEvent event)
                 ui->buttonsLayout->itemAt(numButtons + event.axis)->widget());
     if (!l)
         return;
-    l->setText(QString("[%1]: %2").arg(event.axis).arg(event.value));
+
+    if (ui->viewPercent->isChecked())
+        l->setText(QString("[%1]: %2%").arg(event.axis).arg((100. * event.value) / SDL_MAX_SINT16, 0, 'f', 1));
+    else
+        l->setText(QString("[%1]: %2").arg(event.axis).arg(event.value));
 }
 
 void MainWindow::povPressed(SDL_JoyHatEvent event)
