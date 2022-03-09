@@ -12,6 +12,7 @@
 
 const int kHapticLength = 500;
 const int kSafeTimeout  = 50;
+const int kItemsInRow = 4;
 
 static const char __CLASS__[] = "MainWindow";
 
@@ -103,7 +104,7 @@ void MainWindow::setButtons(int num)
         QPushButton *b = new QPushButton(this);
         b->setText(QString::number(i+1));
         b->setCheckable(true);
-        ui->buttonsLayout->addWidget(b, i / 6, i % 6);
+        ui->buttonsLayout->addWidget(b, i / kItemsInRow, i % kItemsInRow);
     }
 }
 
@@ -138,12 +139,12 @@ void MainWindow::setJoystick(int index)
     setButtons(numButtons);
 
     int axisOffset = numButtons;
-    while (axisOffset % 6) ++axisOffset;
+    while (axisOffset % kItemsInRow) ++axisOffset;
     for (int i = 0; i<numAxis; i++) {
         QLabel *l = new QLabel(this);
         l->setText(QString("[%1]").arg(i));
-        ui->buttonsLayout->addWidget(l, (axisOffset + i) / 6,
-                                        (axisOffset + i) % 6);
+        ui->buttonsLayout->addWidget(l, (axisOffset + i) / kItemsInRow,
+                                        (axisOffset + i) % kItemsInRow);
     }
 
     connect(eventThread, &SdlEventThread::axisEvent,
