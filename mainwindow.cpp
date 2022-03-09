@@ -247,9 +247,10 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
     lr.leftright.small_magnitude = (event.button & 1) ? 0 : 0x7FFF;
 
     if (!haptic) {
-        if (SDL_JoystickRumble(joystick, lr.leftright.large_magnitude, lr.leftright.small_magnitude, lr.leftright.length) < 0)
+        if (SDL_JoystickRumble(joystick, lr.leftright.large_magnitude, lr.leftright.small_magnitude, lr.leftright.length) < 0) {
             qWarning("Failed to start rumble: %s\n", SDL_GetError());
             return;
+        }
     }
 
     hapticId = SDL_HapticNewEffect(haptic, &lr);
