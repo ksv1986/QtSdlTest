@@ -24,11 +24,11 @@ public:
     void setJoystick(int index);
 
 private slots:
-    void axisMoved(SDL_JoyAxisEvent event);
-    void joyDeviceAdded(SDL_JoyDeviceEvent event);
-    void joyDeviceRemoved(SDL_JoyDeviceEvent event);
-    void joystickButtonPressed(SDL_JoyButtonEvent event);
-    void povPressed(SDL_JoyHatEvent event);
+    void axisMoved(const SDL_JoyAxisEvent &event);
+    void joyDeviceAdded(const SDL_JoyDeviceEvent &event);
+    void joyDeviceRemoved(const SDL_JoyDeviceEvent &event);
+    void joystickButtonPressed(const SDL_JoyButtonEvent &event);
+    void povPressed(const SDL_JoyHatEvent &event);
     void stopHaptic();
 
 protected:

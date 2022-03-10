@@ -13,7 +13,7 @@ public:
     void reset();
 
 public slots:
-    void povPressed(SDL_JoyHatEvent event);
+    void povPressed(const SDL_JoyHatEvent &event);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

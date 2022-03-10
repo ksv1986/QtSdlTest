@@ -18,12 +18,12 @@ public:
     void stop();
 
 signals:
-    void axisEvent(SDL_JoyAxisEvent event);
-    void hatEvent(SDL_JoyHatEvent event);
-    void joyButtonEvent(SDL_JoyButtonEvent event);
-    void joyDeviceAdded(SDL_JoyDeviceEvent event);
-    void joyDeviceRemoved(SDL_JoyDeviceEvent event);
-    void sdlEvent(SDL_Event event);
+    void axisEvent(const SDL_JoyAxisEvent &event);
+    void hatEvent(const SDL_JoyHatEvent &event);
+    void joyButtonEvent(const SDL_JoyButtonEvent &event);
+    void joyDeviceAdded(const SDL_JoyDeviceEvent &event);
+    void joyDeviceRemoved(const SDL_JoyDeviceEvent &event);
+    void sdlEvent(const SDL_Event &event);
 
 protected:
     void run() override;

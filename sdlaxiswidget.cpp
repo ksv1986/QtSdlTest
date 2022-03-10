@@ -7,13 +7,13 @@ void SdlAxisWidget::reset()
     update();
 }
 
-void SdlAxisWidget::xaxisMoved(SDL_JoyAxisEvent event)
+void SdlAxisWidget::xaxisMoved(const SDL_JoyAxisEvent &event)
 {
     jx = event.value;
     update();
 }
 
-void SdlAxisWidget::yaxisMoved(SDL_JoyAxisEvent event)
+void SdlAxisWidget::yaxisMoved(const SDL_JoyAxisEvent &event)
 {
     jy = event.value;
     update();

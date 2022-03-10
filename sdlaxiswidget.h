@@ -14,8 +14,8 @@ public:
     void reset();
 
 public slots:
-    void xaxisMoved(SDL_JoyAxisEvent event);
-    void yaxisMoved(SDL_JoyAxisEvent event);
+    void xaxisMoved(const SDL_JoyAxisEvent &event);
+    void yaxisMoved(const SDL_JoyAxisEvent &event);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

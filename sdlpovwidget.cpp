@@ -7,7 +7,7 @@ void SdlPovWidget::reset()
     update();
 }
 
-void SdlPovWidget::povPressed(SDL_JoyHatEvent event)
+void SdlPovWidget::povPressed(const SDL_JoyHatEvent &event)
 {
     value = event.value;
     update();

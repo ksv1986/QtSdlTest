@@ -158,7 +158,7 @@ void MainWindow::setJoystick(int index)
     setHaptic(SDL_HapticOpenFromJoystick(joystick));
 }
 
-void MainWindow::axisMoved(SDL_JoyAxisEvent event)
+void MainWindow::axisMoved(const SDL_JoyAxisEvent &event)
 {
     if (event.which != which)
         return;
@@ -195,7 +195,7 @@ void MainWindow::axisMoved(SDL_JoyAxisEvent event)
         l->setText(QString("[%1]: %2").arg(event.axis).arg(event.value));
 }
 
-void MainWindow::povPressed(SDL_JoyHatEvent event)
+void MainWindow::povPressed(const SDL_JoyHatEvent &event)
 {
     if (event.which != which)
         return;
@@ -220,7 +220,7 @@ void MainWindow::stopHaptic()
     hapticId = -1;
 }
 
-void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
+void MainWindow::joystickButtonPressed(const SDL_JoyButtonEvent &event)
 {
     //qDebug("%s: button %d type %x", __FUNCTION__, event.button, event.type);
     if (event.which != which)
@@ -267,14 +267,14 @@ void MainWindow::joystickButtonPressed(SDL_JoyButtonEvent event)
     QTimer::singleShot(kHapticLength + kSafeTimeout, this, &MainWindow::stopHaptic);
 }
 
-void MainWindow::joyDeviceAdded(SDL_JoyDeviceEvent event)
+void MainWindow::joyDeviceAdded(const SDL_JoyDeviceEvent &event)
 {
     fillJoystickList();
     if (!joystick)
         setJoystick(event.which);
 }
 
-void MainWindow::joyDeviceRemoved(SDL_JoyDeviceEvent event)
+void MainWindow::joyDeviceRemoved(const SDL_JoyDeviceEvent &event)
 {
     if (event.which == SDL_JoystickInstanceID(joystick))
         closeJoystick();

@@ -8,7 +8,7 @@ void SdlSliderWidget::reset()
     update();
 }
 
-void SdlSliderWidget::axisMoved(SDL_JoyAxisEvent event)
+void SdlSliderWidget::axisMoved(const SDL_JoyAxisEvent &event)
 {
     value = event.value;
     update();
