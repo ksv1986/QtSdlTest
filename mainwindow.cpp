@@ -77,7 +77,7 @@ void MainWindow::closeJoystick()
         this, &MainWindow::axisMoved);
 
     while (auto child = ui->buttonsLayout->takeAt(0)) {
-        delete child;
+        delete child->widget();
     }
 
     joystick = 0;
